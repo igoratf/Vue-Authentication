@@ -13,6 +13,12 @@
         <input v-model="photoURL" placeholder="Your photo url">
         <button>Update</button>
       </form>
+
+        <form @submit.prevent="updateEmail">
+          <h2>Update Email </h2>
+          <input v-model="email" placeholder="Your email">
+          <button>Update</button>
+      </form>
     </div>
     
     <div v-else>
@@ -83,6 +89,9 @@ export default {
         displayName:this.displayName,
         photoURL: this.photoURL
       })
+    },
+    updateEmail() {
+      this.authUser.updateEmail(this.email)
     }
   },
 
@@ -92,6 +101,7 @@ export default {
       if (user != null) {
         this.displayName = user.displayName
         this.photoURL = user.photoURL
+        this.email = user.email 
       }
     });
   }
