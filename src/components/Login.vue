@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="login">
     <h1>Vue School - Firebase Authentication</h1>
     <div v-if="authUser">
       <h2> Signed in as {{authUser.email}}</h2>
@@ -32,10 +32,7 @@
 
 <script>
 export default {
-  name: "HelloWorld",
-  props: {
-    msg: String
-  },
+  name: "Login",
   data: function() {
     return {
       email: "",
@@ -46,22 +43,28 @@ export default {
 
   methods: {
     register() {
-      firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
+      firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+      .then((user) => this.authUser = user)
+      .catch(error => alert(error.message))
     },
 
     signOut() {
       firebase.auth().signOut()
+      .then((user) => this.authUser = null)
+      .catch(error => alert(error.message))
     },
 
     signIn() {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+      .then((user) => this.authUser = user)
+      .catch(error => alert(error.message))
     }
   },
 
   created() {
-    firebase.auth().onAuthStateChanged(user => {
+    /* firebase.auth().onAuthStateChanged(user => {
       this.authUser = user;
-    });
+    }); */
   }
 };
 </script>
