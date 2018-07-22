@@ -44,27 +44,24 @@ export default {
   methods: {
     register() {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-      .then((user) => this.authUser = user)
       .catch(error => alert(error.message))
     },
 
     signOut() {
       firebase.auth().signOut()
-      .then((user) => this.authUser = null)
       .catch(error => alert(error.message))
     },
 
     signIn() {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-      .then((user) => this.authUser = user)
       .catch(error => alert(error.message))
     }
   },
 
   created() {
-    /* firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       this.authUser = user;
-    }); */
+    });
   }
 };
 </script>
