@@ -6,6 +6,13 @@
       <img :src="authUser.photoURL" height="150">
       <p>Eae men {{authUser.displayName || 'manolão'}}, belezura?</p>
       <button @click="signOut">Sign Out</button>
+
+      <form @submit.prevent="updateProfile">
+        <h2>Update Profile </h2>
+        <input v-model="displayName" placeholder="Your name">
+        <input v-model="photoURL" placeholder="Your photo url">
+        <button>Update</button>
+      </form>
     </div>
     
     <div v-else>
@@ -42,10 +49,12 @@ export default {
   name: "Login",
   data: function() {
     return {
-      email: "",
-      password: "",
-      authUser: null
-    };
+      email: '',
+      password: '',
+      authUser: null,
+      displayName:null,
+      photoURL: null
+    }
   },
 
   methods: {
@@ -68,12 +77,22 @@ export default {
       firebase.auth().signInWithPopup(provider)
       .catch(error => alert(error.message))
       .then(data => console.log(data.user, data.credential.accessToken))
+    },
+    updateProfile() {
+      this.authUser.updateProfile({
+        displayName:this.displayName,
+        photoURL: this.photoURL
+      })
     }
   },
 
   created() {
     firebase.auth().onAuthStateChanged(user => {
-      this.authUser = user;
+      this.authUser = user
+      if (user != null) {
+        this.displayName = user.displayName
+        this.photoURL = user.photoURL
+      }
     });
   }
 };
