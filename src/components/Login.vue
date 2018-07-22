@@ -102,6 +102,8 @@ export default {
     },
     updatePassword() {
       this.authUser.updatePassword(this.newPassword)
+      .then(() => this.newPassword = null)
+      .catch(error => alert(error.message))
     }
   },
 
