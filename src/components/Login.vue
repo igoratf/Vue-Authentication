@@ -2,10 +2,15 @@
   <div class="login">
     <h1>Vue School - Firebase Authentication</h1>
     <div v-if="authUser">
-      <h2> Signed in as {{authUser.email}}</h2>
+      <h2> Signed in as {{authUser.email}}
+        <img v-if="linkedGoogle" src="https://www.gstatic.com/mobilesdk/160512_mobilesdk/auth_service_google.svg">
+        <img v-if="linkedPassword" src="https://www.gstatic.com/mobilesdk/160409_mobilesdk/images/auth_service_email.svg">
+      </h2>
       <img :src="authUser.photoURL" height="150">
-      <p>Eae men {{authUser.displayName || 'manolão'}}, belezura?</p>
+      <p>Eae men {{authUser.displayName}}</p>
       <button @click="signOut">Sign Out</button>
+      <button v-if="!linkedGoogle" @click="linkGoogle">Link Google Account</button>
+      <button v-else @click="unlinkGoogle">Unlink Google Acoount</button>
 
       <form @submit.prevent="updateProfile">
         <h2>Update Profile </h2>
@@ -91,6 +96,12 @@ export default {
       .catch(error => alert(error.message))
       .then(data => console.log(data.user, data.credential.accessToken))
     },
+    linkGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider()
+      this.authUser.linkWithPopup(provider)
+      .catch(error => alert(error.message))
+      .then(data => console.log(data.user, data.credential.accessToken))
+    },
     updateProfile() {
       this.authUser.updateProfile({
         displayName:this.displayName,
@@ -104,6 +115,18 @@ export default {
       this.authUser.updatePassword(this.newPassword)
       .then(() => this.newPassword = null)
       .catch(error => alert(error.message))
+    },
+    unlinkGoogle() {
+      this.authUser.unlink('google.com')
+    }
+  },
+
+  computed: {
+    linkedGoogle() {
+      return !!this.authUser.providerData.find(provider => provider.providerId === 'google.com')
+    },
+    linkedPassword() {
+      return !!this.authUser.providerData.find(provider => provider.providerId === 'password')
     }
   },
 
