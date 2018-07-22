@@ -19,6 +19,12 @@
           <input v-model="email" placeholder="Your email">
           <button>Update</button>
       </form>
+
+      <form @submit.prevent="updatePassword">
+          <h2>Update Password </h2>
+          <input type="password" v-model="newPassword" placeholder="Your new password">
+          <button>Update</button>
+      </form>
     </div>
     
     <div v-else>
@@ -59,7 +65,8 @@ export default {
       password: '',
       authUser: null,
       displayName:null,
-      photoURL: null
+      photoURL: null,
+      newPassword: ''
     }
   },
 
@@ -92,6 +99,9 @@ export default {
     },
     updateEmail() {
       this.authUser.updateEmail(this.email)
+    },
+    updatePassword() {
+      this.authUser.updatePassword(this.newPassword)
     }
   },
 
